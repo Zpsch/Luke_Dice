@@ -44,9 +44,6 @@ function isneg(){
 
 function roll(){
     let sum = 0;
-    let neg = isneg();
-    if(neg) reply += "- ";
-    else if(reply !== "") reply += "+ ";
 
     let ammount = rest.slice(0,rest.indexOf("d"));
     if(ammount == 0) ammount = 1;
@@ -88,17 +85,14 @@ function roll(){
 } //P rolar dado
 
 function addition(){
-    let neg = isneg();
     let mod;
     let signal = findFirstNonNumeric(rest);
     if(signal !== -1){
-        if(neg) mod = -Number(rest.slice(0,signal));
-        else mod = Number(rest.slice(0,signal));
+        mod = Number(rest.slice(0,signal));
         rest = rest.slice(signal);
     }
     else{
-        if(neg) mod = -Number(rest);
-        else mod = Number(rest);
+        mod = Number(rest);
         if (signal == -1) rest = ' ';
     }
     return mod;
@@ -226,12 +220,15 @@ function dice(msg, message){
         while(rest !== ' '){
             let ismultiply = false;
             let isdivide = false;
+            let neg = isneg();
+            console.log(rest);
 
             if(rest.indexOf("*") !== -1){
                 let segment = rest.slice(0,rest.indexOf("*"));
                 ismultiply= !/[a-zA-Z0-9]/.test(segment);
                 if(rest.indexOf("*") > rest.indexOf("/") && rest.indexOf("/") !== -1 ) ismultiply = false;
-            }if(rest.indexOf("/") !== -1){
+            }
+            if(rest.indexOf("/") !== -1){
                 let segment = rest.slice(0,rest.indexOf("/"));
                 isdivide= !/[a-zA-Z0-9]/.test(segment);
                 if(rest.indexOf("/") > rest.indexOf("*") && rest.indexOf("*") !== -1 ) isdivide = false;
@@ -256,13 +253,20 @@ function dice(msg, message){
                 }
                 numbers[numbers.length-1] = temp;
 
-            } // Multiplica
+            } // Divide
             else if(rest.indexOf("d") == signal && rest.indexOf("d") !== -1){
-                numbers.push(roll());
+                if(neg) reply += "- ";
+                else if(reply !== "") reply += "+ ";
+                let n = roll();
+                if(neg) numbers.push(-n);
+                else numbers.push(n);
                 wasconst = false;
             } //Rola dado
             else{
-            numbers.push(addition());
+            let n = addition();
+            if(neg) neg = -neg;
+            numbers.push(n);
+
             mod += numbers[numbers.length-1];
             wasconst = true;
             } //Soma ou subtracao
