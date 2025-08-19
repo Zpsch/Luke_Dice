@@ -33,8 +33,7 @@ function getRandomInt(max) {
     return Math.floor(Math.random() * max);
 }
 
-function isneg(){
-    let neg = false;
+function isneg(neg){
     while(rest.indexOf("-") == 0 || rest.indexOf("+") == 0){
         if (rest.indexOf("-") == 0) neg = !neg;
         rest = rest.slice(1);
@@ -98,9 +97,8 @@ function addition(){
     return mod;
 } // P somar ou subtrair
 
-function multiply(n){
+function multiply(n, neg){
     let a;
-    let neg = false;
     let signal = findFirstNonNumeric(rest);
     while (signal == 0){
         if (rest.indexOf("d") == 0) break;
@@ -113,9 +111,9 @@ function multiply(n){
         let temp = reply.length;
         a = roll();
         if(neg){
-            reply = reply.slice(0,temp) + "* ( - " + reply.slice(temp+1) + " )";
+            reply = reply.slice(0,temp) + "* ( - " + reply.slice(temp) + " )";
         }
-        else reply = reply.slice(0,temp) + "*" + reply.slice(temp+1);
+        else reply = reply.slice(0,temp) + "* " + reply.slice(temp);
     } //Rola dado
     else{
         a = addition();
@@ -130,9 +128,8 @@ function multiply(n){
     return b;
 }
 
-function divide(n){
+function divide(n, neg){
     let a;
-    let neg = false;
     let signal = findFirstNonNumeric(rest);
     while (signal == 0){
         if (rest.indexOf("d") == 0) break;
@@ -220,23 +217,26 @@ function dice(msg, message){
         while(rest !== ' '){
             let ismultiply = false;
             let isdivide = false;
-            let neg = isneg();
+            let neg = false;
+            neg = isneg(neg);
 
             if(rest.indexOf("*") !== -1){
                 let segment = rest.slice(0,rest.indexOf("*"));
                 ismultiply= !/[a-zA-Z0-9]/.test(segment);
-                if(rest.indexOf("*") > rest.indexOf("/") && rest.indexOf("/") !== -1 ) ismultiply = false;
             }
             if(rest.indexOf("/") !== -1){
                 let segment = rest.slice(0,rest.indexOf("/"));
                 isdivide= !/[a-zA-Z0-9]/.test(segment);
-                if(rest.indexOf("/") > rest.indexOf("*") && rest.indexOf("*") !== -1 ) isdivide = false;
+            }
+            if(ismultiply && isdivide){
+                if(rest.indexOf("*") > rest.indexOf("-")) ismultiply = false;
+                else isdivide = false;
             }
 
             signal = findFirstNonNumeric(rest);
 
             if(ismultiply){
-                let temp = multiply(numbers[numbers.length-1]);
+                let temp = multiply(numbers[numbers.length-1], neg);
                 if (wasconst){
                     reply = reply + "* " + temp / numbers[numbers.length-1];
                     mod -= numbers[numbers.length-1];
@@ -245,7 +245,7 @@ function dice(msg, message){
 
             } // Multiplica
             else if(isdivide){
-                let temp = divide(numbers[numbers.length-1]);
+                let temp = divide(numbers[numbers.length-1], neg);
                 if (wasconst){
                     reply = reply + "/ " + temp / numbers[numbers.length-1];
                     mod -= numbers[numbers.length-1];
