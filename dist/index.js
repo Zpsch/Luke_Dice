@@ -229,7 +229,7 @@ function dice(msg, message){
                 isdivide= !/[a-zA-Z0-9]/.test(segment);
             }
             if(ismultiply && isdivide){
-                if(rest.indexOf("*") > rest.indexOf("-")) ismultiply = false;
+                if(rest.indexOf("*") > rest.indexOf("/")) ismultiply = false;
                 else isdivide = false;
             }
 
