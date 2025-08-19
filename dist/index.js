@@ -221,7 +221,6 @@ function dice(msg, message){
             let ismultiply = false;
             let isdivide = false;
             let neg = isneg();
-            console.log(rest);
 
             if(rest.indexOf("*") !== -1){
                 let segment = rest.slice(0,rest.indexOf("*"));
