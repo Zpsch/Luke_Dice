@@ -300,9 +300,6 @@ function dice(msg, message){
 function eastereggs(message){
     if(message.guild.id === '985848231260999734') return; //Remove eastereggs no Death Despair
 
-    if (message.content.toLowerCase().indexOf('gay') != -1 || message.content.toLowerCase().indexOf('boiola') != -1){
-        message.reply('Falou em Guilherme?');
-    }
     if (message.content.toLowerCase().indexOf('lunee') != -1){
         message.reply('Smt negão 🍔👍');
     }
@@ -316,8 +313,8 @@ function eastereggs(message){
     if (message.content.toLowerCase().indexOf('faz o l') != -1 || message.content.toLowerCase().indexOf('faiz o eli') != -1 || message.content.toLowerCase().indexOf('faça o l') != -1){
         message.reply('https://cdn.discordapp.com/attachments/1145846578922389536/1224054657622609920/image.png?ex=6625533c&is=6612de3c&hm=1abf8b06934c1ede81cb4ed1eb7ea239561f4e4d63673ef1b50f5a223594a17f&');
     }
-    if (message.content.toLowerCase().indexOf('rubens') != -1){
-        message.reply('https://cdn.discordapp.com/attachments/1145846578922389536/1228161431107797097/IMG-20240411-WA0037.jpg?ex=662b0977&is=66189477&hm=1f52655c9a537be8b975d7ab3e379b46a43747f6b2ff2ddc00de6c0d12fbe6a2&');
+    if (message.content.toLowerCase().indexOf('rubens') != -1 || message.content.toLowerCase().indexOf('bolas') != -1 || message.content.toLowerCase().indexOf('balls') != -1){
+        message.reply('https://cdn.discordapp.com/attachments/1228038607428911144/1423386290195534007/7dwL5Wa.jpg?ex=68e01f48&is=68decdc8&hm=16700a2785682ea4029d923d1896f89ec727ef6adaaa82b1132f5cfb23ef029c&');
     }
     if (message.content.toLowerCase().indexOf('rapha') != -1){
         message.reply('https://cdn.discordapp.com/attachments/1145846578922389536/1228367471212367944/20240412_123330.gif?ex=662bc95b&is=6619545b&hm=db47424a7f8f6d70fe7d9a4ca46182c7ba6e20d1147b013699d23e61b24bbdb4&');
