@@ -3,6 +3,7 @@ const keep_alive = require('./keep_alive.js');
 const { Client, IntentsBitField, InteractionCollector, ApplicationCommandOptionWithChoicesAndAutocompleteMixin } = require('discord.js');
 
 let rest, reply;
+let neg = false;
 
 process.on('unhandled Rejection', async (reason, promise) => {
     console.log('Unhandled Rejection at:', promise, 'reason:', reason);
@@ -217,7 +218,7 @@ function dice(msg, message){
         while(rest !== ' '){
             let ismultiply = false;
             let isdivide = false;
-            let neg = false;
+            neg = false;
             neg = isneg(neg);
 
             if(rest.indexOf("*") !== -1){
@@ -263,7 +264,7 @@ function dice(msg, message){
             } //Rola dado
             else{
             let n = addition();
-            if(neg) neg = -neg;
+            if(neg) n = -n;
             numbers.push(n);
 
             mod += numbers[numbers.length-1];
