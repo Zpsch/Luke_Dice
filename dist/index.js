@@ -2,7 +2,7 @@ require('dotenv').config();
 const keep_alive = require('./keep_alive.js');
 const { Client, IntentsBitField, InteractionCollector, ApplicationCommandOptionWithChoicesAndAutocompleteMixin } = require('discord.js');
 
-let rest, reply;
+let rest, reply, name;
 let neg = false;
 
 process.on('unhandled Rejection', async (reason, promise) => {
@@ -170,6 +170,39 @@ function findFirstNonNumeric(str) {
     return -1; // Return -1 if no non-numeric character is found
 }
 
+function namedRoll(){
+    const specialChars = new Set(["+", "-", "*", "/",]);
+    let temp1, temp2;
+    while(rest !== ' '){
+        if(rest === rest.replace(/\s+/g, "")){
+            rest = rest.toLowerCase();
+            rest= rest.replace(/[^0-9d*/+\-#]/g, '');
+            return "";
+        }
+        temp1 = rest.slice(0,rest.indexOf(" "));
+        temp1 = temp1.toLowerCase(); //so trabalhar usando minusculo
+        temp1 = temp1.replace(/[^0-9d*/+\-#]/g, ''); //remove coisas desnecessarias da primeira parte
+        temp2 = rest.slice(rest.indexOf(" ")+1);
+        if(specialChars.has(temp2.at(0)) ){
+            rest = temp1+temp2;
+            if(temp2 === temp2.replace(/[^0-9d*/+\-#]/g, '')){
+                return "";
+            }
+        }
+        else if(specialChars.has(temp1.at(-1)) && /^[\d|d]/i.test(temp2) ){
+            rest = temp1+temp2;
+            if(temp2 === temp2.replace(/[^0-9d*/+\-#]/g, '')) {
+                return "";
+            }
+        }
+        else{
+            rest = temp1;
+            return temp2;
+        }
+
+    }
+}
+
 client.on('messageCreate', (message) => {
 
     if(message.content.indexOf('!r') == 0){
@@ -198,15 +231,20 @@ function dice(msg, message){
     let endreply = "";
     let sum = 0, mod = 0, bigsum = 0;
     let values = [];
-    rest = msg.toLowerCase(); //so trabalhar usando minusculo
-    rest = rest.replace(/[^0-9d*/+\-#]/g, '');
+    rest = msg;
+    rest = rest.trim().replace(/\s+/g, " "); //remover espaços extras
 
     let times = 1;
     if(rest.indexOf("#") != -1){
-        times = Number(rest.slice(0, rest.indexOf("#")));
+        times = rest.slice(0, rest.indexOf("#"));
+        times = times.replace(/[^0-9*/+\-#]/g, '');
+        times = Number(times);
         rest = rest.slice(rest.indexOf("#")+1);
     } //define a quantidade de "vantagens"
+    name = namedRoll(rest);
+    if(name === " ") name = "";
     msg = rest;
+
     for(let i = 0; i < times; i++){
         sum = 0;
         mod = 0;
@@ -280,6 +318,9 @@ function dice(msg, message){
         values[i] = sum;
 
         reply = "` " + `${sum}` + " ` ⟵ " + reply + "\n";
+        if(name !== ""){
+            reply = "'" + name + "', " + reply;
+        }
         endreply += reply;
     }
     values.sort((a, b) => a - b).reverse();
